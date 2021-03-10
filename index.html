@@ -16,6 +16,14 @@
 </div>
 </body>
 <script>
+    const bingo_size = 5;
+    const bingo_num_cells = bingo_size * bingo_size;
+    function assert(cond, msg) {
+        if (!cond) {
+            throw msg;
+        }
+    }
+
     function shuffle(array) {
         let currentIndex = array.length;
         while (0 !== currentIndex) {
@@ -31,25 +39,25 @@
         }
     }
 
-  function generateTableHead(table) {
+    function gen_table(table, strings) {
         // let thead = table.createTHead();
-        let count = 0;
-        for (let i = 0; i < 5; ++i) {
+        let cell = 0;
+        for (let i = 0; i < bingo_size; ++i) {
             let row = table.insertRow();
-            for (let j = 0; j < 5; ++j) {
+            for (let j = 0; j < bingo_size; ++j) {
                 let td = document.createElement("td");
-                let div = document.createElement("div")
-                let text = document.createTextNode(strings[count]);
+                let div = document.createElement("div");
+                let text = document.createTextNode(strings[cell]);
                 div.appendChild(text);
                 td.appendChild(div);
                 row.appendChild(td);
 
-                ++count;
+                ++cell;
             }
         }
     }
 
-    let strings = [
+    const cells_data = [
         '"I just spit everywhere, I\'m so spitty"',
         '"I don\'t know how to explain it"',
         '"I\'m gonna get in trouble"',
@@ -59,34 +67,66 @@
         '"It\'s not a vape"',
         '"I signed the DARE contract"',
         '"I hope my dad isn\'t watching"',
+        '"It\'s not that bad"',
+        '"Do I have a coomer chat?"',
+        '"I\'ve been yelling a lot less, I used to be worse"',
 
+        'Talks about cartoon animals with sexual energy',
+        'Talks about how great Buc-ee\'s is"',
+        'Abuses Koby',
+        [
+            'Tells chat to stop talking about cum',
+            'Talks about cum',
+        ],
+        'Asks chat if she\'s allowed to pee',
         'Any sentence of two words or more repeated three times or more in a row',
         'Technical difficulties',
-        'Mentions someone pissing their pants',
-        'Mentions someone shitting their pants',
+        [
+            'Mentions someone pissing their pants',
+            'Mentions someone shitting their pants',
+        ],
         'Plugs the YouTube channel',
         'Talks shit about DS2 or DS2 viewers',
-        'Ironically promotes incest',
-        'Unironically denounces incest',
-        'Says "PUSSY" in weird high-pitched voice',
-        'a', 'b', 'c', 'd', 'e',
-        'f', 'g', 'h', 'i', 'j',
-        'k', 'l', 'm', 'n', 'o',
-        'p', 'q', 'r', 's', 't',
+        [
+            'Ironically promotes incest',
+            'Unironically denounces incest',
+        ],
+        'Says "PUSSY" in an odd, high-pitched voice',
     ];
-    if (strings.length < 25) {
-        throw "Derp";
+
+    let strings = [];
+    {
+        let remaining = [...cells_data];
+        while (strings.length < bingo_num_cells) {
+            if (remaining.length === 0) {
+                // If we don't have enough items, add dupes
+                assert(false, "Not enough items");
+                remaining = [...cells_data];
+            }
+            let index = Math.floor(Math.random() * remaining.length);
+            let chosen = remaining[index];
+            if (typeof(chosen) === "string") {
+                strings.push(chosen);
+            } else {
+                for (let elem of chosen) {
+                    strings.push(elem);
+                }
+            }
+            remaining.splice(index, 1);
+        }
     }
     shuffle(strings);
 
-  let table = document.querySelector("table");
-    generateTableHead(table);
+    let table = document.querySelector("table");
+    gen_table(table, strings);
     // TODO:
     //  margins/padding in table cells
     //  Fix vertical alignment in table cells
     //  Font, colours
     //  Click on boxes for X
     //  Auto detect bingo
+    //  reset button
+    //  update URL and generate share link on bingo
 </script>
 
 <style>
@@ -110,6 +150,7 @@
     table {
         border-collapse: collapse;
         width: 40%;
+        font-family: Arial, Helvetica, sans-serif;
     }
     .center {
         display: flex;
