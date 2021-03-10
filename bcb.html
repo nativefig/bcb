@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BerryCrepe Bingo!</title>
+</head>
+
+<body>
+<div class="center">
+<table>
+<tr><th><div>B</div></th> <th><div>E</div></th> <th><div>R</div></th> <th><div>R</div></th> <th><div>Y</div></th></tr>
+<tr><th><div>C</div></th> <th><div>R</div></th> <th><div>E</div></th> <th><div>P</div></th> <th><div>E</div></th></tr>
+<tr><th><div>B</div></th> <th><div>I</div></th> <th><div>N</div></th> <th><div>G</div></th> <th><div>O</div></th></tr>
+<!-- here goes our data! -->
+</table>
+</div>
+</body>
+<script>
+    function shuffle(array) {
+        let currentIndex = array.length;
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            let temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+    }
+
+  function generateTableHead(table) {
+        // let thead = table.createTHead();
+        let count = 0;
+        for (let i = 0; i < 5; ++i) {
+            let row = table.insertRow();
+            for (let j = 0; j < 5; ++j) {
+                let td = document.createElement("td");
+                let div = document.createElement("div")
+                let text = document.createTextNode(strings[count]);
+                div.appendChild(text);
+                td.appendChild(div);
+                row.appendChild(td);
+
+                ++count;
+            }
+        }
+    }
+
+    let strings = [
+        '"I just spit everywhere, I\'m so spitty"',
+        '"I don\'t know how to explain it"',
+        '"I\'m gonna get in trouble"',
+        '"Popeyes called me stupid"',
+        '"I don\'t know what we\'re doing tomorrow"',
+        '"Feet aren\'t free"',
+        '"It\'s not a vape"',
+        '"I signed the DARE contract"',
+        '"I hope my dad isn\'t watching"',
+
+        'Any sentence of two words or more repeated three times or more in a row',
+        'Technical difficulties',
+        'Mentions someone pissing their pants',
+        'Mentions someone shitting their pants',
+        'Plugs the YouTube channel',
+        'Talks shit about DS2 or DS2 viewers',
+        'Ironically promotes incest',
+        'Unironically denounces incest',
+        'Says "PUSSY" in weird high-pitched voice',
+        'a', 'b', 'c', 'd', 'e',
+        'f', 'g', 'h', 'i', 'j',
+        'k', 'l', 'm', 'n', 'o',
+        'p', 'q', 'r', 's', 't',
+    ];
+    if (strings.length < 25) {
+        throw "Derp";
+    }
+    shuffle(strings);
+
+  let table = document.querySelector("table");
+    generateTableHead(table);
+    // TODO:
+    //  margins/padding in table cells
+    //  Fix vertical alignment in table cells
+    //  Font, colours
+    //  Click on boxes for X
+    //  Auto detect bingo
+</script>
+
+<style>
+    table, td {
+        border: 2px solid black;
+    }
+    th div {
+        height: 20px;
+        padding: 10px 0;
+    }
+    td {
+        height: 0;
+        width: 20%;
+        padding-bottom: 20%;
+        position: relative;
+    }
+    td div {
+        width: 100%;
+        position: absolute;
+        text-align: center;
+        padding: 50px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 40%;
+    }
+    .center {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+</html>
