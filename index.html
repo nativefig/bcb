@@ -6,13 +6,20 @@
 </head>
 
 <body>
-<div class="box">
-<table>
-<tr><th><div>B</div></th> <th><div>E</div></th> <th><div>R</div></th> <th><div>R</div></th> <th><div>Y</div></th></tr>
-<tr><th><div>C</div></th> <th><div>R</div></th> <th><div>E</div></th> <th><div>P</div></th> <th><div>E</div></th></tr>
-<tr><th><div>B</div></th> <th><div>I</div></th> <th><div>N</div></th> <th><div>G</div></th> <th><div>O</div></th></tr>
+<div class="center">
+<table class="card card_head">
+<tr><td><div>B</div></td> <td><div>E</div></td> <td><div>R</div></td> <td><div>R</div></td> <td><div>Y</div></td></tr>
+<tr><td><div>C</div></td> <td><div>R</div></td> <td><div>E</div></td> <td><div>P</div></td> <td><div>E</div></td></tr>
+<tr><td><div>B</div></td> <td><div>I</div></td> <td><div>N</div></td> <td><div>G</div></td> <td><div>O</div></td></tr>
+</table>
+</div>
+
+<div class="center">
+<div class="square">
+<table class="sq_content card card_body">
 <!-- here goes our data! -->
 </table>
+</div>
 </div>
 </body>
 <script>
@@ -128,7 +135,7 @@ let strings = [];
 }
 shuffle(strings);
 
-let table = document.querySelector("table");
+let table = document.querySelector(".card_body");
 gen_table(table, strings);
 // TODO:
 //  margins/padding in table cells
@@ -138,51 +145,53 @@ gen_table(table, strings);
 //  Auto detect bingo
 //  reset button
 //  update URL and generate share link on bingo
+//  The css is way better now but we really want a way to force the table
+//      cells to stay square instead of stretching vertically. Should be doable.
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 </script>
 
 <style>
-    th div {
-        height: 20px;
-        padding: 10px 0;
+    .square {
+        position: relative;
+        width: 80vmin;
     }
-    td div {
+    .card_head {
+        width: 80vmin;
+    }
+    .square:after {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+    }
+    .sq_content {
+        position: absolute;
         width: 100%;
         height: 100%;
-        position: absolute;
-        text-align: center;
-        //padding: 50px 0;
     }
-    table {
-        border-collapse: collapse;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    @media screen and (orientation:portrait) {
-    table {
-        width: 95%;
-    }
-    }
-    @media screen and (orientation:landscape) {
-    table {
-        width: 40%;
-    }
-    }
-    .box {
+    .center {
         display: flex;
         justify-content: center;
-        border: 1px solid black;
     }
-    .cell {
+    td div {
+        text-align: center;
+    }
+    .card {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .card_head td {
+        padding: 5px;
+        font-weight: bold;
+    }
+    .card_body {
+        border-collapse: collapse;
+    }
+    .card_body td {
         //background-color: coral;
-    }
-    td {
         border: 3px solid black;
-        height: 20%;
         width: 20%;
-        position: relative;
-        padding-bottom: 20%;
+        height: 20%;
     }
 </style>
 </html>
