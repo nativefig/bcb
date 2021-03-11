@@ -15,11 +15,9 @@
 </div>
 
 <div class="center">
-<div class="square">
-<table class="sq_content card card_body">
+<table class="card card_body">
 <!-- here goes our data! -->
 </table>
-</div>
 </div>
 </body>
 <script>
@@ -139,50 +137,46 @@ let table = document.querySelector(".card_body");
 gen_table(table, strings);
 // TODO:
 //  margins/padding in table cells
-//  Fix vertical alignment in table cells
 //  Font, colours
 //  Click on boxes for X
 //  Auto detect bingo
 //  reset button
 //  update URL and generate share link on bingo
-//  The css is way better now but we really want a way to force the table
-//      cells to stay square instead of stretching vertically. Should be doable.
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 </script>
 
 <style>
-    .square {
-        position: relative;
-        width: 80vmin;
+    @media screen and (orientation:landscape) {
+        .card_body {
+            width: 80vmin;
+            height: 80vmin;
+        }
+        .card_head {
+            width: 80vmin;
+        }
     }
-    .card_head {
-        width: 80vmin;
+    @media screen and (orientation:portrait) {
+        .card_body {
+            width: 85vmin;
+            height: 85vmin;
+        }
+        .card_head {
+            width: 85vmin;
+        }
     }
-    .square:after {
-        content: "";
-        display: block;
-        padding-bottom: 100%;
-    }
-    .sq_content {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-    }
+
     .center {
         display: flex;
         justify-content: center;
     }
-    td div {
-        text-align: center;
-    }
-    .card {
-        font-family: Arial, Helvetica, sans-serif;
-    }
     .card_head td {
-        padding: 5px;
+        padding: 0.2rem;
         font-weight: bold;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 2.5vmin;
     }
     .card_body {
         border-collapse: collapse;
@@ -192,6 +186,9 @@ gen_table(table, strings);
         border: 3px solid black;
         width: 20%;
         height: 20%;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.7vmin;
     }
 </style>
 </html>
