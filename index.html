@@ -48,32 +48,34 @@ function shuffle(array) {
 }
 
 function clicked_td(i, j) {
-    console.log(`Clicked td ${i},${j}`);
+    card_data[i][j].classList.toggle("checked");
 }
 
+// Returns a 5x5 2d array of Cells
 function gen_table(table, strings) {
     // let thead = table.createTHead();
-    let cell = 0;
+    let rows = [];
+    let cell_count = 0;
     for (let i = 0; i < bingo_size; ++i) {
-        let row = table.insertRow();
+        let row_elem = table.insertRow();
+        let row_data = [];
         for (let j = 0; j < bingo_size; ++j) {
             let td = document.createElement("td");
-            let div = document.createElement("div");
-            let text = document.createTextNode(strings[cell]);
+            let text = document.createTextNode(strings[cell_count]);
 
             td.setAttribute("onclick", `clicked_td(${i}, ${j})`);
-            div.setAttribute("class", "cell");
 
-            div.appendChild(text);
-            td.appendChild(div);
-            row.appendChild(td);
-
-            ++cell;
+            td.appendChild(text);
+            row_elem.appendChild(td);
+            row_data.push(td);
+            ++cell_count;
         }
+        rows.push(row_data);
     }
+    return rows;
 }
 
-const cells_data = [
+const cells_text = [
     '"I just spit everywhere, I\'m so spitty"',
     '"I don\'t know how to explain it"',
     '"I\'m gonna get in trouble"',
@@ -83,10 +85,12 @@ const cells_data = [
     '"It\'s not a vape"',
     '"I signed the DARE contract"',
     '"I hope my dad isn\'t watching"',
-    '"It\'s not that bad"',
     '"Do I have a coomer chat?"',
     '"I\'ve been yelling a lot less, I used to be worse"',
 
+    'Describes a food as "It\'s not that bad"',
+    'Calls someone an "Andy"',
+    'Tells chat that she doesn\'t want to peg us',
     'Talks about cartoon animals with sexual energy',
     'Talks about how great Buc-ee\'s is"',
     'Abuses Koby',
@@ -107,17 +111,17 @@ const cells_data = [
         'Ironically promotes incest',
         'Unironically denounces incest',
     ],
-    'Says "PUSSY" in an odd, high-pitched voice',
+    'Says "PUSSY" in a weird, high-pitched voice',
 ];
 
 let strings = [];
 {
-    let remaining = [...cells_data];
+    let remaining = [...cells_text];
     while (strings.length < bingo_num_cells) {
         if (remaining.length === 0) {
             // If we don't have enough items, add dupes
             assert(false, "Not enough items");
-            remaining = [...cells_data];
+            remaining = [...cells_text];
         }
         let index = Math.floor(Math.random() * remaining.length);
         let chosen = remaining[index];
@@ -134,7 +138,7 @@ let strings = [];
 shuffle(strings);
 
 let table = document.querySelector(".card_body");
-gen_table(table, strings);
+card_data = gen_table(table, strings);
 // TODO:
 //  margins/padding in table cells
 //  Font, colours
@@ -171,6 +175,9 @@ gen_table(table, strings);
         display: flex;
         justify-content: center;
     }
+    .card td {
+        width: 20%;
+    }
     .card_head td {
         padding: 0.2rem;
         font-weight: bold;
@@ -180,15 +187,23 @@ gen_table(table, strings);
     }
     .card_body {
         border-collapse: collapse;
+        background-color: seashell;
+        box-shadow: 3px 3px 8px #707070;
     }
     .card_body td {
-        //background-color: coral;
-        border: 3px solid black;
-        width: 20%;
         height: 20%;
+        border: 3px solid #202020;
         text-align: center;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 1.7vmin;
+        padding: 1.5%;
+    }
+    .checked {
+        background-color: tomato;
+    }
+    body {
+        background-color: thistle;
+        color: #202020;
     }
 </style>
 </html>
