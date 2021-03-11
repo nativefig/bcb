@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<div class="center">
+<div class="box">
 <table>
 <tr><th><div>B</div></th> <th><div>E</div></th> <th><div>R</div></th> <th><div>R</div></th> <th><div>Y</div></th></tr>
 <tr><th><div>C</div></th> <th><div>R</div></th> <th><div>E</div></th> <th><div>P</div></th> <th><div>E</div></th></tr>
@@ -57,7 +57,7 @@ function gen_table(table, strings) {
             let text = document.createTextNode(strings[cell]);
 
             td.setAttribute("onclick", `clicked_td(${i}, ${j})`);
-            td.setAttribute("class", "cell");
+            div.setAttribute("class", "cell");
 
             div.appendChild(text);
             td.appendChild(div);
@@ -148,18 +148,12 @@ gen_table(table, strings);
         height: 20px;
         padding: 10px 0;
     }
-    td {
-        border: 3px solid black;
-        height: 0;
-        width: 20%;
-        padding-bottom: 20%;
-        position: relative;
-    }
     td div {
         width: 100%;
+        height: 100%;
         position: absolute;
         text-align: center;
-        padding: 50px 0;
+        //padding: 50px 0;
     }
     table {
         border-collapse: collapse;
@@ -175,12 +169,20 @@ gen_table(table, strings);
         width: 40%;
     }
     }
-    .center {
+    .box {
         display: flex;
         justify-content: center;
+        border: 1px solid black;
     }
     .cell {
-        background-color: coral;
+        //background-color: coral;
+    }
+    td {
+        border: 3px solid black;
+        height: 20%;
+        width: 20%;
+        position: relative;
+        padding-bottom: 20%;
     }
 </style>
 </html>
