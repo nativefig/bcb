@@ -42,6 +42,10 @@ function shuffle(array) {
     }
 }
 
+function clicked_td(i, j) {
+    console.log(`Clicked td ${i},${j}`);
+}
+
 function gen_table(table, strings) {
     // let thead = table.createTHead();
     let cell = 0;
@@ -51,6 +55,10 @@ function gen_table(table, strings) {
             let td = document.createElement("td");
             let div = document.createElement("div");
             let text = document.createTextNode(strings[cell]);
+
+            td.setAttribute("onclick", `clicked_td(${i}, ${j})`);
+            td.setAttribute("class", "cell");
+
             div.appendChild(text);
             td.appendChild(div);
             row.appendChild(td);
@@ -141,7 +149,7 @@ gen_table(table, strings);
         padding: 10px 0;
     }
     td {
-        border: 2px solid black;
+        border: 3px solid black;
         height: 0;
         width: 20%;
         padding-bottom: 20%;
@@ -170,6 +178,9 @@ gen_table(table, strings);
     .center {
         display: flex;
         justify-content: center;
+    }
+    .cell {
+        background-color: coral;
     }
 </style>
 </html>
