@@ -7,31 +7,39 @@
 
 <body>
 <div class="center">
-<table class="card card_head card_width">
-<tr><td><div>B</div></td> <td><div>E</div></td> <td><div>R</div></td> <td><div>R</div></td> <td><div>Y</div></td></tr>
-<tr><td><div>C</div></td> <td><div>R</div></td> <td><div>E</div></td> <td><div>P</div></td> <td><div>E</div></td></tr>
-<tr><td><div>B</div></td> <td><div>I</div></td> <td><div>N</div></td> <td><div>G</div></td> <td><div>O</div></td></tr>
+<table class="card card_head ">
+<tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
+<tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
+<tr><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
 </table>
 </div>
 
 <div class="center">
-<table class="card card_body card_width">
+<table class="card card_body">
 </table>
 </div>
 
 <div class="center">
-<div id="button_box" class="card_width">
-<button id="url_button" type="button" onclick="clicked_url_button()">Share this card</button>
+<table class="card button_table">
+<tr>
+    <td id="url_button" onclick="clicked_url_button()">
+        Share this card
+    </td>
+    <td class="hidden"> </td>
+    <td class="hidden"> </td>
+    <td class="hidden"> </td>
+    <td class="hidden"> </td>
+</tr>
+</table>
+</div>
+
+<div class="center">
+<div id="url_box" class="card hidden">
 </div>
 </div>
 
 <div class="center">
-<div id="url_box" class="card_width hidden">
-</div>
-</div>
-
-<div class="center">
-<div id="spam_box" class="card_width">
+<div id="spam_box" class="card">
 </div>
 </div>
 
@@ -42,7 +50,7 @@
         .card_body {
             height: 75vmin;
         }
-        .card_width {
+        .card {
             width: 75vmin;
         }
     }
@@ -50,7 +58,7 @@
         .card_body {
             height: 85vmin;
         }
-        .card_width {
+        .card {
             width: 85vmin;
         }
     }
@@ -63,6 +71,7 @@
         width: 20%;
     }
     .card_head td {
+        color: #303030;
         padding: 0.2rem;
         font-weight: bold;
         text-align: center;
@@ -70,38 +79,47 @@
         font-size: 2.5vmin;
     }
     .card_body {
-        border-collapse: collapse;
-        background-color: seashell;
-        box-shadow: 3px 3px 8px #707070;
+        border-collapse: separate;
+        border-spacing: 10px 10px;
+        //box-shadow: 3px 3px 8px #707070;
     }
     .card_body td {
+        background-color: seashell;
         height: 20%;
-        border: 3px solid #202020;
+        //border: 3px solid #202020;
         text-align: center;
-        font-family: Arial, Helvetica, sans-serif;
         font-size: 1.7vmin;
         padding: 1.5%;
     }
     .checked {
-        background-color: tomato;
+        background-color: tomato !important;
     }
     body {
-        background-color: thistle;
         color: #202020;
         font-family: Arial, Helvetica, sans-serif;
+    }
+    html {
+        height: 100vh;
+        //background-image: linear-gradient(thistle, orchid);
+        background-image: linear-gradient(#F3904F, #3B4371);
     }
     #url_box {
         padding-top: 0.5rem;
         padding-left: 2rem;
     }
-    #button_box {
-        padding-top: 2rem;
+    .button_table {
+        border-collapse: separate;
+        border-spacing: 10px 10px;
+        //padding-top: 2rem;
     }
-    #url_button {
-        width: 10rem;
+    .button_table td {
+        background-color: seashell;
+        text-align: center;
+        font-size: 1.7vmin;
+        padding: 1.5%;
     }
     .hidden {
-        display: none;
+        visibility: hidden;
     }
 </style>
 
@@ -118,6 +136,9 @@ const url_box = document.getElementById("url_box");
 const url_button = document.getElementById("url_button");
 
 const cells_text = [
+    // explains zoomer shit from tiktok
+    // tells a crippling childhood story
+    // talks about people who hate her
     '"I just spit everywhere, I\'m so spitty"',
     '"I don\'t know how to explain it"',
     '"I\'m gonna get in trouble"',
@@ -249,7 +270,7 @@ function clicked_url_button() {
     if (url_box.classList.toggle("hidden")) {
         url_button.innerText = "Share this card";
     } else {
-        url_button.innerText = "Hide URL";
+        url_button.innerText = "Hide url";
     }
 }
 
@@ -345,6 +366,7 @@ function main() {
     //  colours
     //  Auto detect bingo
     //  reset button
+    // style button
 }
 
 main();
