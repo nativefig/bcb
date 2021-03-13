@@ -24,11 +24,13 @@
         Share this card
     </td>
     <td class="hidden"> </td>
-    <td class="hidden"> </td>
-    <td id="reset_button" class="button" onclick="clicked_reset_button()">
+    <td id="hide_button" class="button" onclick="clicked_hide_button()">
+        Hide
+    </td>
+    <td class="button" onclick="clicked_reset_button()">
         Reset
     </td>
-    <td id="new_button" class="button" onclick="clicked_new_button()">
+    <td class="button" onclick="clicked_new_button()">
         New card
     </td>
 </tr>
@@ -146,6 +148,10 @@
         //border: 2px solid #202020;
         background-color: #108dc7 !important;
     }
+    .blur_text {
+        color: transparent;
+        text-shadow: 0 0 1vmin rgba(0,0,0,0.8)
+    }
 </style>
 
 <script>
@@ -161,6 +167,7 @@ const spam_box = document.getElementById("spam_box");
 const url_box = document.getElementById("url_box");
 const url_button = document.getElementById("url_button");
 const url_link = document.getElementById("url_link");
+const hide_button = document.getElementById("hide_button");
 
 const cells_text = [
     '"I just spit everywhere, I\'m so spitty"',
@@ -249,7 +256,8 @@ const cells_text = [
 
 // Mutable global data
 var rand = null;
-var card_data = null;
+var cells = null;
+var blur = false;
 var seed = null;
 
 function assert(cond, msg) {
@@ -332,19 +340,25 @@ function update_url_box() {
     let page = get_page_url_no_params();
     let state = get_card_state();
     let url = `${page}?seed=${seed}&state=${state}`;
-    // TODO make this a link
-    //url_box.innerText = url;
+    if (blur) {
+        url += "&blur";
+    }
     url_link.innerText = url;
     url_link.setAttribute("href", url);
 }
 
-function toggle_square(cell) {
-    let class_checked = cell.innerText.includes("BlueGuy") ?
-            "checked_blue" : "checked";
-    cell.classList.toggle(class_checked);
+function get_checked_class(cell) {
+    return cell.innerText.includes("BlueGuy") ? "checked_blue" : "checked";
 }
-function clicked_td(cell_id) {
-    toggle_square(card_data[cell_id]);
+function is_checked(cell) {
+    return cell.classList.contains(get_checked_class(cell));
+}
+function toggle_square(cell) {
+    let checked = cell.classList.toggle(get_checked_class(cell));
+    cell.classList.toggle("blur_text", blur && !checked);
+}
+function clicked_cell(cell_id) {
+    toggle_square(cells[cell_id]);
     update_url_box();
 }
 
@@ -356,14 +370,38 @@ function clicked_url_button() {
     }
 }
 function clicked_reset_button() {
-    for (let cell of card_data) {
-        cell.classList.remove("checked");
+    for (let cell of cells) {
+        cell.classList.remove(get_checked_class(cell));
     }
     update_url_box();
+    update_blur();
 }
 function clicked_new_button() {
     set_cookie("id", "", 0);
     window.location = get_page_url_no_params();
+}
+function update_blur() {
+    if (blur) {
+        for (let cell of cells) {
+            if (!is_checked(cell)) {
+                cell.classList.add("blur_text");
+            }
+        }
+    } else {
+        for (let cell of cells) {
+            cell.classList.remove("blur_text");
+        }
+    }
+}
+function clicked_hide_button() {
+    blur = !blur;
+    if (blur) {
+        hide_button.innerText = "Show";
+    } else {
+        hide_button.innerText = "Hide";
+    }
+    update_url_box();
+    update_blur();
 }
 
 function gen_table(table, strings) {
@@ -373,26 +411,24 @@ function gen_table(table, strings) {
     for (let i = 0; i < bingo_size; ++i) {
         let row_elem = table.insertRow();
         for (let j = 0; j < bingo_size; ++j) {
-            let td = document.createElement("td");
+            let cell = document.createElement("td");
             let text;
             const free_square_idx = (bingo_num_cells - 1) / 2;
             if (cells.length === free_square_idx) {
                 text = "Free space!";
-                toggle_square(td);
+                cell.classList.add(get_checked_class(cell));
                 // Add a dummy square to cells
-                let dummy = document.createElement("td");
-                toggle_square(dummy);
-                cells.push(dummy);
+                cells.push(document.createElement("td"));
                 // Apply offset to positions to account for the free space
                 fixup = 1;
             } else {
                 text = strings[cells.length - fixup];
-                td.setAttribute("onclick", `clicked_td(${cells.length})`);
-                cells.push(td);
+                cell.setAttribute("onclick", `clicked_cell(${cells.length})`);
+                cells.push(cell);
             }
 
-            td.appendChild(document.createTextNode(text));
-            row_elem.appendChild(td);
+            cell.appendChild(document.createTextNode(text));
+            row_elem.appendChild(cell);
         }
     }
     return cells;
@@ -401,8 +437,8 @@ function gen_table(table, strings) {
 function get_card_state() {
     let bits = 0;
     let bit_count = 0;
-    for (let cell of card_data) {
-        if (cell.classList.contains("checked")) {
+    for (let cell of cells) {
+        if (is_checked(cell)) {
             bits |= 1 << bit_count;
         }
         ++bit_count;
@@ -413,6 +449,8 @@ function get_card_state() {
 // Execution starts here
 function main() {
     let search_params = new URLSearchParams(window.location.search);
+
+    blur = search_params.has("blur");
 
     seed = search_params.get("seed");
     if (seed === null) {
@@ -462,24 +500,23 @@ function main() {
     shuffle(strings);
 
     let table = document.querySelector(".body_table");
-    card_data = gen_table(table, strings);
-    assert(card_data.length === bingo_num_cells);
+    cells = gen_table(table, strings);
+    assert(cells.length === bingo_num_cells);
 
     let state_str = search_params.get("state");
     if (state_str !== null) {
         let state_num = parseInt(state_str, param_str_base);
-        for (let i = 0; i < card_data.length; ++i, state_num >>= 1) {
+        for (let i = 0; i < cells.length; ++i, state_num >>= 1) {
             if (state_num & 1) {
-                card_data[i].classList.add("checked");
+                toggle_square(cells[i]);
             }
         }
     }
-
     update_url_box();
+    update_blur();
 
     // TODO:
     // Detect bingo state
-    // Make url clickable or easy to copy
     // Fix line break in Buc-ees
 }
 
