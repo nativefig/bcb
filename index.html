@@ -7,20 +7,18 @@
 
 <body>
 <div class="center">
-<table class="card card_head ">
+<div class="zzz">
+
+<table class="head_table ">
 <tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
 <tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
 <tr><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
 </table>
-</div>
 
-<div class="center">
-<table class="card card_body">
+<table class="body_table">
 </table>
-</div>
 
-<div class="center">
-<table class="card button_table">
+<table class="button_table">
 <tr>
     <td id="url_button" onclick="clicked_url_button()">
         Share this card
@@ -31,72 +29,88 @@
     <td class="hidden"> </td>
 </tr>
 </table>
+
+<table>
+<tr>
+<td id="url_box" class="">
+</td>
+</tr>
+</table>
+
+<div id="spam_box" class="">
 </div>
 
-<div class="center">
-<div id="url_box" class="card hidden">
 </div>
 </div>
-
-<div class="center">
-<div id="spam_box" class="card">
-</div>
-</div>
-
 </body>
 
 <style>
-    @media screen and (orientation:landscape) {
-        .card_body {
-            height: 75vmin;
-        }
-        .card {
-            width: 75vmin;
-        }
-    }
-    @media screen and (orientation:portrait) {
-        .card_body {
-            height: 85vmin;
-        }
-        .card {
-            width: 85vmin;
-        }
-    }
-
     .center {
         display: flex;
         justify-content: center;
     }
-    .card td {
-        width: 20%;
+    @media screen and (orientation:landscape) {
+        .body_table {
+            height: 75vmin;
+        }
+        .zzz {
+                width: 75vmin;
+        }
     }
-    .card_head td {
-        color: #303030;
-        padding: 0.2rem;
+    @media screen and (orientation:portrait) {
+        .body_table {
+            height: 85vmin;
+        }
+        .zzz {
+                width: 85vmin;
+        }
+    }
+
+    .show_border {
+        border: 1px solid #202020;
+    }
+
+    .thing {
+    }
+
+    table {
+        border-collapse: separate;
+        border-spacing: 10px 10px;
+        width: 100%;
+    }
+    td {
+        padding-left: 1.5%;
+        padding-right: 1.5%;
+        background-color: seashell;
+    }
+
+    .head_table {
+        border-spacing: 10px 1px;
+    }
+    .head_table td {
+        width: 20%;
+        color: seashell;
+        background-color: inherit;
         font-weight: bold;
         text-align: center;
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 2.5vmin;
+        font-size: 3.0vmin;
     }
-    .card_body {
-        border-collapse: separate;
-        border-spacing: 10px 10px;
+    .body_table td {
+        width: 20%;
         //box-shadow: 3px 3px 8px #707070;
-    }
-    .card_body td {
-        background-color: seashell;
         height: 20%;
-        //border: 3px solid #202020;
         text-align: center;
         font-size: 1.7vmin;
-        padding: 1.5%;
     }
-    .checked {
-        background-color: tomato !important;
+    .button_table td {
+        text-align: center;
+        width: 20%;
     }
     body {
         color: #202020;
         font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.7vmin;
     }
     html {
         height: 100vh;
@@ -104,22 +118,15 @@
         background-image: linear-gradient(#F3904F, #3B4371);
     }
     #url_box {
-        padding-top: 0.5rem;
-        padding-left: 2rem;
+        //padding-top: 0.5rem;
+        //padding-left: 2rem;
     }
-    .button_table {
-        border-collapse: separate;
-        border-spacing: 10px 10px;
-        //padding-top: 2rem;
-    }
-    .button_table td {
-        background-color: seashell;
-        text-align: center;
-        font-size: 1.7vmin;
-        padding: 1.5%;
-    }
+
     .hidden {
         visibility: hidden;
+    }
+    .checked {
+        background-color: tomato !important;
     }
 </style>
 
@@ -347,7 +354,7 @@ function main() {
     }
     shuffle(strings);
 
-    let table = document.querySelector(".card_body");
+    let table = document.querySelector(".body_table");
     card_data = gen_table(table, strings);
 
     let state_str = search_params.get("state");
@@ -366,7 +373,7 @@ function main() {
     //  colours
     //  Auto detect bingo
     //  reset button
-    // style button
+    //  make cells look clickable
 }
 
 main();
