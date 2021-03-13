@@ -148,6 +148,7 @@
 
 const bingo_size = 5;
 const bingo_num_cells = bingo_size * bingo_size;
+
 const param_str_base = 32;
 
 const spam_box = document.getElementById("spam_box");
@@ -328,11 +329,13 @@ function update_url_box() {
     url_box.innerText = url;
 }
 
-function clicked_td(cell_id) {
-    let cell = card_data[cell_id];
+function toggle_square(cell) {
     let class_checked = cell.innerText.includes("BlueGuy") ?
             "checked_blue" : "checked";
     cell.classList.toggle(class_checked);
+}
+function clicked_td(cell_id) {
+    toggle_square(card_data[cell_id]);
     update_url_box();
 }
 
@@ -355,18 +358,32 @@ function clicked_new_button() {
 }
 
 function gen_table(table, strings) {
+    assert(strings.length === bingo_num_cells - 1);
     let cells = [];
+    let fixup = 0;
     for (let i = 0; i < bingo_size; ++i) {
         let row_elem = table.insertRow();
         for (let j = 0; j < bingo_size; ++j) {
             let td = document.createElement("td");
-            let text = document.createTextNode(strings[cells.length]);
+            let text;
+            const free_square_idx = (bingo_num_cells - 1) / 2;
+            if (cells.length === free_square_idx) {
+                text = "Free space!";
+                toggle_square(td);
+                // Add a dummy square to cells
+                let dummy = document.createElement("td");
+                toggle_square(dummy);
+                cells.push(dummy);
+                // Apply offset to positions to account for the free space
+                fixup = 1;
+            } else {
+                text = strings[cells.length - fixup];
+                td.setAttribute("onclick", `clicked_td(${cells.length})`);
+                cells.push(td);
+            }
 
-            td.setAttribute("onclick", `clicked_td(${cells.length})`);
-
-            td.appendChild(text);
+            td.appendChild(document.createTextNode(text));
             row_elem.appendChild(td);
-            cells.push(td);
         }
     }
     return cells;
@@ -405,7 +422,8 @@ function main() {
     let strings = [];
     {
         let remaining = [...cells_text];
-        while (strings.length < bingo_num_cells) {
+        // Minus one to account for free space
+        while (strings.length < (bingo_num_cells - 1)) {
             if (remaining.length === 0) {
                 // If we don't have enough items, add dupes
                 remaining = [...cells_text];
@@ -436,6 +454,7 @@ function main() {
 
     let table = document.querySelector(".body_table");
     card_data = gen_table(table, strings);
+    assert(card_data.length === bingo_num_cells);
 
     let state_str = search_params.get("state");
     if (state_str !== null) {
@@ -450,9 +469,9 @@ function main() {
     update_url_box();
 
     // TODO:
-    //  colours
-    //  Auto detect bingo
-    //  make BlueGuy cell highlight in blue
+    // Detect bingo state
+    // Make url clickable or easy to copy
+    // Fix line break in Buc-ees
 }
 
 main();
