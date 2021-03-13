@@ -470,7 +470,7 @@ function main() {
             unique_id = id_int.toString(param_str_base);
             set_cookie("id", unique_id, 0.5);
         }
-        seed = unique_id; // TODO add date
+        seed = unique_id;
     }
 
     rand = splitmix32(hash(seed));
@@ -526,7 +526,6 @@ function main() {
 
     // TODO:
     // Detect bingo state
-    // Fix line break in Buc-ees
 }
 
 main();
