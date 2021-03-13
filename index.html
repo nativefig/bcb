@@ -115,7 +115,8 @@
     html {
         height: 100vh;
         //background-image: linear-gradient(thistle, orchid);
-        background-image: linear-gradient(#F3904F, #3B4371);
+        //background-image: linear-gradient(#F3904F, #3B4371);
+        background-image: linear-gradient(#B4557D, #3F5273);
     }
 
     .button {
@@ -131,7 +132,7 @@
     }
     .checked {
         //border: 2px solid #202020;
-        background-color: #EB5757 !important;
+        background-color: #F3904F !important;
     }
 </style>
 
@@ -270,6 +271,7 @@ function update_url_box() {
     let page = window.location.href.split("?")[0];
     let state = get_card_state();
     let url = `${page}?seed=${seed}&state=${state}`;
+    // TODO make this a link
     url_box.innerText = url;
 }
 
