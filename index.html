@@ -36,7 +36,9 @@
 
 <table>
 <tr>
-    <td id="url_box" class="hidden"> </td>
+    <td id="url_box" class="hidden">
+        <a id="url_link" href=""></a>
+    </td>
 </tr>
 </table>
 
@@ -83,6 +85,7 @@
         padding-right: 1.5%;
         background-color: seashell;
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+        border-radius: 0.5vmin;
     }
 
     .head_table {
@@ -113,6 +116,9 @@
         color: #202020;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 1.7vmin;
+    }
+    a {
+        color: inherit;
     }
     html {
         height: 100vh;
@@ -154,6 +160,7 @@ const param_str_base = 32;
 const spam_box = document.getElementById("spam_box");
 const url_box = document.getElementById("url_box");
 const url_button = document.getElementById("url_button");
+const url_link = document.getElementById("url_link");
 
 const cells_text = [
     '"I just spit everywhere, I\'m so spitty"',
@@ -326,7 +333,9 @@ function update_url_box() {
     let state = get_card_state();
     let url = `${page}?seed=${seed}&state=${state}`;
     // TODO make this a link
-    url_box.innerText = url;
+    //url_box.innerText = url;
+    url_link.innerText = url;
+    url_link.setAttribute("href", url);
 }
 
 function toggle_square(cell) {
