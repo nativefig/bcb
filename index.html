@@ -83,8 +83,8 @@
         width: 100%;
     }
     td {
-        padding-left: 1.5%;
-        padding-right: 1.5%;
+        padding-left: 1.4%;
+        padding-right: 1.4%;
         background-color: seashell;
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
         border-radius: 0.5vmin;
@@ -107,7 +107,6 @@
         width: 20%;
         height: 20%;
         text-align: center;
-        font-size: 1.7vmin;
         cursor: pointer;
     }
     .button_table td {
@@ -117,10 +116,11 @@
     body {
         color: #202020;
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 1.7vmin;
+        font-size: 1.8vmin;
     }
     a {
         color: inherit;
+        text-decoration: inherit;
     }
     html {
         height: 100vh;
@@ -130,7 +130,9 @@
     }
 
     .button {
-        height: 3vmin;
+        height: 3.2vmin;
+        padding-left: 1.0%;
+        padding-right: 1.0%;
         cursor: pointer;
     }
     #url_box {
@@ -151,6 +153,9 @@
     .blur_text {
         color: transparent;
         text-shadow: 0 0 1vmin rgba(0,0,0,0.8)
+    }
+    .small_text {
+        font-size: 1.7vmin;
     }
 </style>
 
@@ -231,7 +236,7 @@ const cells_text = [
     'Calls someone an "Andy"',
     'Tells chat that she doesn\'t want to peg us',
     'Talks about cartoon animals with sexual energy',
-    'Talks about how great Buc-ee\'s is"',
+    'Talks about how great Buc-ee\'s is',
     'Abuses Koby',
     'Claims to be a millionaire',
     [
@@ -353,12 +358,12 @@ function get_checked_class(cell) {
 function is_checked(cell) {
     return cell.classList.contains(get_checked_class(cell));
 }
-function toggle_square(cell) {
+function toggle_cell(cell) {
     let checked = cell.classList.toggle(get_checked_class(cell));
     cell.classList.toggle("blur_text", blur && !checked);
 }
 function clicked_cell(cell_id) {
-    toggle_square(cells[cell_id]);
+    toggle_cell(cells[cell_id]);
     update_url_box();
 }
 
@@ -373,6 +378,7 @@ function clicked_reset_button() {
     for (let cell of cells) {
         cell.classList.remove(get_checked_class(cell));
     }
+    blur = false;
     update_url_box();
     update_blur();
 }
@@ -427,6 +433,9 @@ function gen_table(table, strings) {
                 cells.push(cell);
             }
 
+            if (text.length > 60) {
+                cell.classList.add("small_text");
+            }
             cell.appendChild(document.createTextNode(text));
             row_elem.appendChild(cell);
         }
@@ -508,7 +517,7 @@ function main() {
         let state_num = parseInt(state_str, param_str_base);
         for (let i = 0; i < cells.length; ++i, state_num >>= 1) {
             if (state_num & 1) {
-                toggle_square(cells[i]);
+                toggle_cell(cells[i]);
             }
         }
     }
