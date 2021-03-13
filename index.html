@@ -7,7 +7,7 @@
 
 <body>
 <div class="center">
-<div class="zzz">
+<div class="centered">
 
 <table class="head_table ">
 <tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
@@ -32,8 +32,7 @@
 
 <table>
 <tr>
-<td id="url_box" class="">
-</td>
+    <td id="url_box" class="hidden"> </td>
 </tr>
 </table>
 
@@ -53,7 +52,7 @@
         .body_table {
             height: 75vmin;
         }
-        .zzz {
+        .centered {
                 width: 75vmin;
         }
     }
@@ -61,7 +60,7 @@
         .body_table {
             height: 85vmin;
         }
-        .zzz {
+        .centered {
                 width: 85vmin;
         }
     }
@@ -70,24 +69,23 @@
         border: 1px solid #202020;
     }
 
-    .thing {
-    }
-
     table {
         border-collapse: separate;
-        border-spacing: 10px 10px;
+        border-spacing: 1vmin 1vmin;
         width: 100%;
     }
     td {
         padding-left: 1.5%;
         padding-right: 1.5%;
         background-color: seashell;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
     }
 
     .head_table {
-        border-spacing: 10px 1px;
+        border-spacing: 1vmin 0px;
     }
     .head_table td {
+        box-shadow: none;
         width: 20%;
         color: seashell;
         background-color: inherit;
@@ -98,7 +96,6 @@
     }
     .body_table td {
         width: 20%;
-        //box-shadow: 3px 3px 8px #707070;
         height: 20%;
         text-align: center;
         font-size: 1.7vmin;
@@ -117,9 +114,12 @@
         //background-image: linear-gradient(thistle, orchid);
         background-image: linear-gradient(#F3904F, #3B4371);
     }
+
+    #url_button {
+        height: 3vmin;
+    }
     #url_box {
-        //padding-top: 0.5rem;
-        //padding-left: 2rem;
+        height: 3vmin;
     }
 
     .hidden {
@@ -277,7 +277,7 @@ function clicked_url_button() {
     if (url_box.classList.toggle("hidden")) {
         url_button.innerText = "Share this card";
     } else {
-        url_button.innerText = "Hide url";
+        url_button.innerText = "Hide link";
     }
 }
 
