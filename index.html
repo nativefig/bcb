@@ -149,9 +149,6 @@ const url_box = document.getElementById("url_box");
 const url_button = document.getElementById("url_button");
 
 const cells_text = [
-    // explains zoomer shit from tiktok
-    // tells a crippling childhood story
-    // talks about people who hate her
     '"I just spit everywhere, I\'m so spitty"',
     '"I don\'t know how to explain it"',
     '"I\'m gonna get in trouble"',
@@ -163,7 +160,40 @@ const cells_text = [
     '"I hope my dad isn\'t watching"',
     '"Do I have a coomer chat?"',
     '"I\'ve been yelling a lot less, I used to be worse"',
+    '"Catgirls are not furries"',
+    '"Don\'t look at my YouTube recommended videos"',
 
+    [
+        1,
+        'Spills something on mousepad',
+        'Spills something on keyboard',
+    ],
+    [
+        1,
+        'Yells "watch your mouth" at someone in chat',
+        'Yells "I don\'t like your attitude" at someone in chat',
+    ],
+    'Speaks gibberish when someone resubs',
+    [
+        1,
+        'Threatens to cry on stream',
+        'Cries on stream',
+    ],
+    [
+        1,
+        'Tells the Fritos story again',
+        'Refuses to tell the Fritos story again',
+    ],
+    'Uses a bad MS Paint drawing to explain something',
+    'Threatens chat by holding a knife to the camera',
+    'Talks about people who hate her',
+    'Uses the word "cooch-hole"',
+    'Throws up on or off cam',
+    'BlueGuy',
+    'Hides sweaty armpits by covering them with hands',
+    'Threatens to fire a mod',
+    'Tells a cringe inducing story from her childhood',
+    'Explains some zoomer shit she learned on TikTok',
     'Describes a food as "It\'s not that bad"',
     'Calls someone an "Andy"',
     'Tells chat that she doesn\'t want to peg us',
@@ -178,6 +208,7 @@ const cells_text = [
     'Any sentence of two words or more repeated three times or more in a row',
     'Technical difficulties',
     [
+        1,
         'Mentions someone pissing their pants',
         'Mentions someone shitting their pants',
     ],
@@ -357,6 +388,16 @@ function main() {
             let chosen = remaining[index];
             if (typeof(chosen) === "string") {
                 strings.push(chosen);
+            } else if (typeof(chosen[0]) == "number") {
+                let choices = chosen.slice(1);
+                shuffle(choices);
+                let take = chosen[0];
+                for (let choice of choices) {
+                    if (take <= 0)
+                        break;
+                    --take;
+                    strings.push(choice);
+                }
             } else {
                 for (let elem of chosen) {
                     strings.push(elem);
@@ -385,6 +426,7 @@ function main() {
     // TODO:
     //  colours
     //  Auto detect bingo
+    //  make BlueGuy cell highlight in blue
 }
 
 main();
