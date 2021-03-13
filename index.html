@@ -25,9 +25,11 @@
     </td>
     <td class="hidden"> </td>
     <td class="hidden"> </td>
-    <td class="hidden"> </td>
     <td id="reset_button" class="button" onclick="clicked_reset_button()">
         Reset
+    </td>
+    <td id="new_button" class="button" onclick="clicked_new_button()">
+        New card
     </td>
 </tr>
 </table>
@@ -299,8 +301,12 @@ function shuffle(array) {
     }
 }
 
+function get_page_url_no_params() {
+    return window.location.href.split("?")[0];
+}
+
 function update_url_box() {
-    let page = window.location.href.split("?")[0];
+    let page = get_page_url_no_params();
     let state = get_card_state();
     let url = `${page}?seed=${seed}&state=${state}`;
     // TODO make this a link
@@ -324,6 +330,10 @@ function clicked_reset_button() {
         cell.classList.remove("checked");
     }
     update_url_box();
+}
+function clicked_new_button() {
+    set_cookie("id", "", 0);
+    window.location = get_page_url_no_params();
 }
 
 function gen_table(table, strings) {
@@ -364,10 +374,10 @@ function main() {
     if (seed === null) {
         let cookies = get_cookies();
         let unique_id = cookies.get("id");
-        if (unique_id === undefined) {
+        if (!unique_id) {
             let id_int = Math.floor(Math.random() * (1 << 20));
             unique_id = id_int.toString(param_str_base);
-            set_cookie("id", unique_id);
+            set_cookie("id", unique_id, 0.5);
         }
         seed = unique_id; // TODO add date
     }
@@ -380,7 +390,6 @@ function main() {
         while (strings.length < bingo_num_cells) {
             if (remaining.length === 0) {
                 // If we don't have enough items, add dupes
-                assert(false, "Not enough items");
                 remaining = [...cells_text];
             }
             let index = Math.floor(rand() * remaining.length);
