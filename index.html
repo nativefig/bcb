@@ -184,6 +184,7 @@ const cells_text = [
         'Tells the Fritos story again',
         'Refuses to tell the Fritos story again',
     ],
+    'Makes a JoJo reference',
     'Uses a bad MS Paint drawing to explain something',
     'Threatens chat by holding a knife to the camera',
     'Talks about people who hate her',
@@ -362,10 +363,8 @@ function main() {
     seed = search_params.get("seed");
     if (seed === null) {
         let cookies = get_cookies();
-        let unique_id;
-        if (cookies.has("id")) {
-            unique_id = cookies.get("id");
-        } else {
+        let unique_id = cookies.get("id");
+        if (unique_id === undefined) {
             let id_int = Math.floor(Math.random() * (1 << 20));
             unique_id = id_int.toString(param_str_base);
             set_cookie("id", unique_id);
