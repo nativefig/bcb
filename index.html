@@ -20,13 +20,15 @@
 
 <table class="button_table">
 <tr>
-    <td id="url_button" onclick="clicked_url_button()">
+    <td id="url_button" class="button" onclick="clicked_url_button()">
         Share this card
     </td>
     <td class="hidden"> </td>
     <td class="hidden"> </td>
     <td class="hidden"> </td>
-    <td class="hidden"> </td>
+    <td id="reset_button" class="button" onclick="clicked_reset_button()">
+        Reset
+    </td>
 </tr>
 </table>
 
@@ -116,7 +118,7 @@
         background-image: linear-gradient(#F3904F, #3B4371);
     }
 
-    #url_button {
+    .button {
         height: 3vmin;
         cursor: pointer;
     }
@@ -283,6 +285,12 @@ function clicked_url_button() {
         url_button.innerText = "Hide link";
     }
 }
+function clicked_reset_button() {
+    for (let cell of card_data) {
+        cell.classList.remove("checked");
+    }
+    update_url_box();
+}
 
 function gen_table(table, strings) {
     let cells = [];
@@ -375,8 +383,6 @@ function main() {
     // TODO:
     //  colours
     //  Auto detect bingo
-    //  reset button
-    //  make cells look clickable
 }
 
 main();
