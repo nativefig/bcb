@@ -136,6 +136,10 @@
         //border: 2px solid #202020;
         background-color: #F3904F !important;
     }
+    .checked_blue {
+        //border: 2px solid #202020;
+        background-color: #108dc7 !important;
+    }
 </style>
 
 <script>
@@ -314,7 +318,10 @@ function update_url_box() {
 }
 
 function clicked_td(cell_id) {
-    card_data[cell_id].classList.toggle("checked");
+    let cell = card_data[cell_id];
+    let class_checked = cell.innerText.includes("BlueGuy") ?
+            "checked_blue" : "checked";
+    cell.classList.toggle(class_checked);
     update_url_box();
 }
 
