@@ -108,7 +108,7 @@
         color: #ffb347 !important;
         text-shadow: 0 0 1vmin #ffb347;
     }
-    .bingo_state #share_button {
+    .glow {
         box-shadow: 0 0 2vmin #ffb347;
     }
 </style>
@@ -121,7 +121,7 @@
 <table class="head_table">
 <tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
 <tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
-<tr id="bingo_word"><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
+<tr><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
 </table>
 
 <table class="body_table">
@@ -353,7 +353,7 @@ function refresh_state() {
 
     body_table.classList.toggle("blur_unchecked", blur);
 
-    update_share_button_text(bingo);
+    update_share_button(bingo);
 
     {
         let page = get_page_url_no_params();
@@ -374,12 +374,14 @@ function toggle_cell(cell) {
     cell.classList.toggle("checked");
 }
 
-function update_share_button_text(bingo) {
-    if (url_box.classList.contains("hidden")) {
-        share_button.innerText = is_bingo() ? "Share bingo!" : "Share card";
+function update_share_button(bingo) {
+    let hidden = url_box.classList.contains("hidden");
+    if (hidden) {
+        share_button.innerText = bingo ? "Share bingo!" : "Share card";
     } else {
         share_button.innerText = "Hide link";
     }
+    share_button.classList.toggle("glow", bingo && hidden);
 }
 
 function clicked_cell(cell_id) {
@@ -388,7 +390,7 @@ function clicked_cell(cell_id) {
 }
 function clicked_share_button() {
     url_box.classList.toggle("hidden");
-    update_share_button_text(is_bingo());
+    update_share_button(is_bingo());
 }
 function clicked_reset_button() {
     for (let cell of cells) {
