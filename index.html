@@ -46,11 +46,11 @@
 
     .head_table {
         border-spacing: 1vmin 0;
+        color: seashell;
     }
     .head_table td {
         box-shadow: none;
         width: 20%;
-        color: seashell;
         background-color: inherit;
         font-weight: bold;
         text-align: center;
@@ -104,9 +104,12 @@
     .small_text {
         font-size: 1.7vmin;
     }
-    .bingo_state td {
+    .bingo_state #bingo_word {
         color: #ffb347 !important;
         text-shadow: 0 0 1vmin #ffb347;
+    }
+    .bingo_state #share_button {
+        box-shadow: 0 0 2vmin #ffb347;
     }
 </style>
 </head>
@@ -118,7 +121,7 @@
 <table class="head_table">
 <tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
 <tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
-<tr id="bingo"><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
+<tr id="bingo_word"><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
 </table>
 
 <table class="body_table">
@@ -126,8 +129,7 @@
 
 <table class="button_table">
 <tr>
-    <td id="url_button" class="button" onclick="clicked_url_button()">
-        Share card
+    <td id="share_button" class="button" onclick="clicked_share_button()">
     </td>
     <td class="hidden"> </td>
     <td id="hide_button" class="button" onclick="clicked_hide_button()">
@@ -145,7 +147,7 @@
 <table>
 <tr>
     <td id="url_box" class="hidden">
-        <a id="url_link" href=""></a>
+        <a href=""></a>
     </td>
 </tr>
 </table>
@@ -161,10 +163,11 @@ const free_square_idx = (bingo_num_cells - 1) / 2;
 const param_str_base = 32;
 
 const url_box = document.getElementById("url_box");
-const url_button = document.getElementById("url_button");
-const url_link = document.getElementById("url_link");
+const share_button = document.getElementById("share_button");
+const url_link = document.querySelector("#url_box a");
 const hide_button = document.getElementById("hide_button");
 const body_table = document.querySelector(".body_table");
+const body = document.querySelector("body");
 
 const cells_text = [
     '"I just spit everywhere, I\'m so spitty"',
@@ -342,26 +345,26 @@ function is_bingo() {
     const dmask2 = 0x111110;
     return ((bits & dmask1) === dmask1 || (bits & dmask2) === dmask2)
 }
-function detect_bingo() {
-    const bingo_text = document.getElementById("bingo");
-    bingo_text.classList.toggle("bingo_state", is_bingo());
-}
-
-function update_url_box() {
-    let page = get_page_url_no_params();
-    let state = get_card_state().toString(param_str_base);
-    let url = `${page}?seed=${seed}&state=${state}`;
-    if (blur) {
-        url += "&blur";
-    }
-    url_link.innerText = url;
-    url_link.setAttribute("href", url);
-}
 
 function refresh_state() {
-    update_url_box();
-    update_blur();
-    detect_bingo();
+    let bingo = is_bingo();
+
+    body.classList.toggle("bingo_state", bingo);
+
+    body_table.classList.toggle("blur_unchecked", blur);
+
+    update_share_button_text(bingo);
+
+    {
+        let page = get_page_url_no_params();
+        let state = get_card_state().toString(param_str_base);
+        let url = `${page}?seed=${seed}&state=${state}`;
+        if (blur) {
+            url += "&blur";
+        }
+        url_link.innerText = url;
+        url_link.setAttribute("href", url);
+    }
 }
 
 function is_checked(cell) {
@@ -370,18 +373,22 @@ function is_checked(cell) {
 function toggle_cell(cell) {
     let checked = cell.classList.toggle("checked");
 }
-function clicked_cell(cell_id) {
-    toggle_cell(cells[cell_id]);
-    update_url_box();
-    detect_bingo();
+
+function update_share_button_text(bingo) {
+    if (url_box.classList.contains("hidden")) {
+        share_button.innerText = is_bingo() ? "Share bingo!" : "Share card";
+    } else {
+        share_button.innerText = "Hide link";
+    }
 }
 
-function clicked_url_button() {
-    if (url_box.classList.toggle("hidden")) {
-        url_button.innerText = "Share card";
-    } else {
-        url_button.innerText = "Hide link";
-    }
+function clicked_cell(cell_id) {
+    toggle_cell(cells[cell_id]);
+    refresh_state();
+}
+function clicked_share_button() {
+    url_box.classList.toggle("hidden");
+    update_share_button_text(is_bingo());
 }
 function clicked_reset_button() {
     for (let cell of cells) {
@@ -394,9 +401,6 @@ function clicked_new_button() {
     set_cookie("id", "", 0);
     window.location = get_page_url_no_params();
 }
-function update_blur() {
-    body_table.classList.toggle("blur_unchecked", blur);
-}
 function clicked_hide_button() {
     blur = !blur;
     if (blur) {
@@ -404,8 +408,7 @@ function clicked_hide_button() {
     } else {
         hide_button.innerText = "Hide";
     }
-    update_url_box();
-    update_blur();
+    refresh_state();
 }
 
 function gen_table(table, strings) {
@@ -507,8 +510,7 @@ function main() {
     }
     shuffle(strings);
 
-    let table = document.querySelector(".body_table");
-    cells = gen_table(table, strings);
+    cells = gen_table(body_table, strings);
     assert(cells.length === bingo_num_cells);
 
     let state_str = search_params.get("state");
