@@ -509,6 +509,8 @@ function main() {
             }
             remaining.splice(index, 1);
         }
+        // Truncate if necessary
+        strings.length = bingo_num_cells - 1;
     }
     shuffle(strings);
 
