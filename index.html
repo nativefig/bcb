@@ -1,56 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Bingo card for twitch.tv/berrycrepe">
-    <meta name="keywords" content="BerryCrepe, bingo, twitch, twitch.tv">
-    <meta name="author" content="nativefig">
-    <meta name="google-site-verification" content="nEs3VBddwiBkWqrW60thOsIcsHEvQjFGLOXb-TZU4dU" />
-    <title>BERRYCREPE BINGO</title>
-</head>
-
-<body>
-<div class="center">
-<div class="centered">
-
-<table class="head_table">
-<tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
-<tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
-<tr id="bingo"><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
-</table>
-
-<table class="body_table">
-</table>
-
-<table class="button_table">
-<tr>
-    <td id="url_button" class="button" onclick="clicked_url_button()">
-        Share card
-    </td>
-    <td class="hidden"> </td>
-    <td id="hide_button" class="button" onclick="clicked_hide_button()">
-        Hide
-    </td>
-    <td class="button" onclick="clicked_reset_button()">
-        Reset
-    </td>
-    <td class="button" onclick="clicked_new_button()">
-        New card
-    </td>
-</tr>
-</table>
-
-<table>
-<tr>
-    <td id="url_box" class="hidden">
-        <a id="url_link" href=""></a>
-    </td>
-</tr>
-</table>
-
-</div>
-</div>
-</body>
+<meta charset="UTF-8" />
+<meta name="description" content="Bingo card for twitch.tv/berrycrepe" />
+<meta name="keywords" content="BerryCrepe, bingo, twitch, twitch.tv" />
+<meta name="author" content="nativefig" />
+<meta name="google-site-verification" content="nEs3VBddwiBkWqrW60thOsIcsHEvQjFGLOXb-TZU4dU" />
+<title>BERRYCREPE BINGO</title>
 
 <style>
     .center {
@@ -124,8 +80,6 @@
     }
     html {
         height: 100vh;
-        //background-image: linear-gradient(thistle, orchid);
-        //background-image: linear-gradient(#F3904F, #3B4371);
         background-image: linear-gradient(#B4557D, #3F5273);
     }
 
@@ -157,11 +111,51 @@
         color: #ffb347 !important;
     }
 </style>
+</head>
+
+<body>
+<div class="center">
+<div class="centered">
+
+<table class="head_table">
+<tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
+<tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
+<tr id="bingo"><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
+</table>
+
+<table class="body_table">
+</table>
+
+<table class="button_table">
+<tr>
+    <td id="url_button" class="button" onclick="clicked_url_button()">
+        Share card
+    </td>
+    <td class="hidden"> </td>
+    <td id="hide_button" class="button" onclick="clicked_hide_button()">
+        Hide
+    </td>
+    <td class="button" onclick="clicked_reset_button()">
+        Reset
+    </td>
+    <td class="button" onclick="clicked_new_button()">
+        New card
+    </td>
+</tr>
+</table>
+
+<table>
+<tr>
+    <td id="url_box" class="hidden">
+        <a id="url_link" href=""></a>
+    </td>
+</tr>
+</table>
+
+</div>
+</div>
 
 <script>
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 const bingo_size = 5;
 const bingo_num_cells = bingo_size * bingo_size;
 const free_square_idx = (bingo_num_cells - 1) / 2;
@@ -545,4 +539,5 @@ function main() {
 main();
 
 </script>
+</body>
 </html>
