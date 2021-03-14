@@ -10,138 +10,138 @@
 <meta name="google-site-verification" content="nEs3VBddwiBkWqrW60thOsIcsHEvQjFGLOXb-TZU4dU" />
 
 <style>
-    /* Set default on element kinds. */
-    body {
-        color: #202020;
-        font-family: Arial, sans-serif;
-        font-size: 1.8vmin;
-    }
-    html {
-        height: 100vh;
-        background-image: linear-gradient(#B4557D, #3F5273);
-    }
-    table {
-        border-collapse: separate;
-        border-spacing: 1vmin 1vmin;
-        width: 100%;
-    }
-    td {
-        padding-left: 1.5%;
-        padding-right: 1.5%;
-        background-color: seashell;
-        box-shadow: 0.2vmin 0.2vmin 0.6vmin rgba(0, 0, 0, 0.5);
-        border-radius: 0.5vmin;
-    }
-    a {
-        color: inherit;
-        text-decoration: inherit;
-    }
+/* Set default on element kinds. */
+body {
+    color: #202020;
+    font-family: Arial, sans-serif;
+    font-size: 1.8vmin;
+}
+html {
+    height: 100vh;
+    background-image: linear-gradient(#B4557D, #3F5273);
+}
+table {
+    border-collapse: separate;
+    border-spacing: 1vmin 1vmin;
+    width: 100%;
+}
+td {
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    background-color: seashell;
+    box-shadow: 0.2vmin 0.2vmin 0.6vmin rgba(0, 0, 0, 0.5);
+    border-radius: 0.5vmin;
+}
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
 
-    /* Center content and make the body table square. */
-    .center {
-        display: flex;
-        justify-content: center;
+/* Center content and make the body table square. */
+.center {
+    display: flex;
+    justify-content: center;
+}
+@media screen and (orientation:landscape) {
+    #body_table {
+        height: 75vmin;
     }
-    @media screen and (orientation:landscape) {
-        #body_table {
-            height: 75vmin;
-        }
-        .centered {
-            width: 75vmin;
-        }
+    .centered {
+        width: 75vmin;
     }
-    @media screen and (orientation:portrait) {
-        #body_table {
-            height: 95vmin;
-        }
-        .centered {
-            width: 95vmin;
-        }
+}
+@media screen and (orientation:portrait) {
+    #body_table {
+        height: 95vmin;
     }
+    .centered {
+        width: 95vmin;
+    }
+}
 
-    /* Style the content tables. */
-    #head_table {
-        border-spacing: 1vmin 0;
-        color: seashell;
-    }
-    #head_table td {
-        box-shadow: none;
-        width: 20%;
-        background-color: inherit;
-        font-weight: bold;
-        text-align: center;
-        font-size: 3.0vmin;
-    }
-    #body_table td {
-        width: 20%;
-        height: 20%;
-        text-align: center;
-        cursor: pointer;
-    }
-    #button_table td {
-        text-align: center;
-        width: 20%;
-    }
-    .button {
-        height: 3vmin;
-        cursor: pointer;
-    }
+/* Style the content tables. */
+#head_table {
+    border-spacing: 1vmin 0;
+    color: seashell;
+}
+#head_table td {
+    box-shadow: none;
+    width: 20%;
+    background-color: inherit;
+    font-weight: bold;
+    text-align: center;
+    font-size: 3.0vmin;
+}
+#body_table td {
+    width: 20%;
+    height: 20%;
+    text-align: center;
+    cursor: pointer;
+}
+#button_table td {
+    text-align: center;
+    width: 20%;
+}
+.button {
+    height: 3vmin;
+    cursor: pointer;
+}
 
-    .hidden {
-        visibility: hidden;
-    }
-    .small_text {
-        font-size: 1.7vmin;
-    }
+.hidden {
+    visibility: hidden;
+}
+.small_text {
+    font-size: 1.7vmin;
+}
 
-    /* Highlight checked cells. */
-    .checked {
-        background-color: #ffb347 !important;
-    }
-    .checked.blueguy {
-        background-color: #108dc7 !important;
-    }
+/* Highlight checked cells. */
+.checked {
+    background-color: #ffb347 !important;
+}
+.checked.blueguy {
+    background-color: #108dc7 !important;
+}
 
-    /* Blur unchecked cells if state_blur. */
-    .state_blur #body_table td:not(.checked) {
-        color: transparent;
-        text-shadow: 0 0 1vmin rgba(0,0,0,0.8);
-    }
+/* Blur unchecked cells if state_blur. */
+.state_blur #body_table td:not(.checked) {
+    color: transparent;
+    text-shadow: 0 0 1vmin rgba(0,0,0,0.8);
+}
 
-    /* Change blur button text depending on state_blur. */
-    #blur_button:after {
-        content: "Hide";
-    }
-    .state_blur #blur_button:after {
-        content: "Show";
-    }
+/* Change blur button text depending on state_blur. */
+#blur_button:after {
+    content: "Hide";
+}
+.state_blur #blur_button:after {
+    content: "Show";
+}
 
-    /* Change share button text depending on state_show_url and state_bingo.
-     * Order matters for these rules.
-     */
-    #share_button div:after {
-        content: "Share card";
-    }
-    .state_bingo #share_button div:after {
-        content: "Share bingo!";
-    }
-    .state_show_url #share_button div:after {
-        content: "Hide link";
-    }
+/* Change share button text depending on state_show_url and state_bingo.
+ * Order matters for these rules.
+ */
+#share_button div:after {
+    content: "Share card";
+}
+.state_bingo #share_button div:after {
+    content: "Share bingo!";
+}
+.state_show_url #share_button div:after {
+    content: "Hide link";
+}
 
-    /* Highlight the share button if state_bingo and we're not already showing
-     * the url. */
-    .state_bingo:not(.state_show_url) #share_button {
-        box-shadow: 0 0 2vmin #ffb347;
-    }
+/* Highlight the share button if state_bingo and we're not already showing
+ * the url. */
+.state_bingo:not(.state_show_url) #share_button {
+    box-shadow: 0 0 2vmin #ffb347;
+}
 
-    #url_box {
-        height: 3vmin;
-        visibility: hidden;
-    }
-    .state_show_url #url_box {
-        visibility: visible;
-    }
+#url_box {
+    height: 3vmin;
+    visibility: hidden;
+}
+.state_show_url #url_box {
+    visibility: visible;
+}
 </style>
 </head>
 
