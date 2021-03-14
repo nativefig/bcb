@@ -10,6 +10,34 @@
 <meta name="google-site-verification" content="nEs3VBddwiBkWqrW60thOsIcsHEvQjFGLOXb-TZU4dU" />
 
 <style>
+    /* Set default on element kinds. */
+    body {
+        color: #202020;
+        font-family: Arial, sans-serif;
+        font-size: 1.8vmin;
+    }
+    html {
+        height: 100vh;
+        background-image: linear-gradient(#B4557D, #3F5273);
+    }
+    table {
+        border-collapse: separate;
+        border-spacing: 1vmin 1vmin;
+        width: 100%;
+    }
+    td {
+        padding-left: 1.5%;
+        padding-right: 1.5%;
+        background-color: seashell;
+        box-shadow: 0.2vmin 0.2vmin 0.6vmin rgba(0, 0, 0, 0.5);
+        border-radius: 0.5vmin;
+    }
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    /* Center content and make the body table square. */
     .center {
         display: flex;
         justify-content: center;
@@ -31,19 +59,7 @@
         }
     }
 
-    table {
-        border-collapse: separate;
-        border-spacing: 1vmin 1vmin;
-        width: 100%;
-    }
-    td {
-        padding-left: 1.5%;
-        padding-right: 1.5%;
-        background-color: seashell;
-        box-shadow: 0.2vmin 0.2vmin 0.6vmin rgba(0, 0, 0, 0.5);
-        border-radius: 0.5vmin;
-    }
-
+    /* Style the content tables. */
     #head_table {
         border-spacing: 1vmin 0;
         color: seashell;
@@ -66,29 +82,19 @@
         text-align: center;
         width: 20%;
     }
-    body {
-        color: #202020;
-        font-family: Arial, sans-serif;
-        font-size: 1.8vmin;
-    }
-    a {
-        color: inherit;
-        text-decoration: inherit;
-    }
-    html {
-        height: 100vh;
-        background-image: linear-gradient(#B4557D, #3F5273);
-    }
-
     .button {
-        height: 3.2vmin;
+        height: 3vmin;
         cursor: pointer;
     }
 
     .hidden {
         visibility: hidden;
     }
+    .small_text {
+        font-size: 1.7vmin;
+    }
 
+    /* Highlight checked cells. */
     .checked {
         background-color: #ffb347 !important;
     }
@@ -96,15 +102,13 @@
         background-color: #108dc7 !important;
     }
 
-    .small_text {
-        font-size: 1.7vmin;
-    }
-
+    /* Blur unchecked cells if state_blur. */
     .state_blur #body_table td:not(.checked) {
         color: transparent;
         text-shadow: 0 0 1vmin rgba(0,0,0,0.8);
     }
 
+    /* Change blur button text depending on state_blur. */
     #blur_button:after {
         content: "Hide";
     }
@@ -112,6 +116,9 @@
         content: "Show";
     }
 
+    /* Change share button text depending on state_show_url and state_bingo.
+     * Order matters for these rules.
+     */
     #share_button div:after {
         content: "Share card";
     }
@@ -122,6 +129,8 @@
         content: "Hide link";
     }
 
+    /* Highlight the share button if state_bingo and we're not already showing
+     * the url. */
     .state_bingo:not(.state_show_url) #share_button {
         box-shadow: 0 0 2vmin #ffb347;
     }
@@ -141,20 +150,19 @@
 <div class="centered">
 
 <table id="head_table">
-<tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
-<tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
-<tr><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
+<tr><td>B</td><td>E</td><td>R</td><td>R</td><td>Y</td></tr>
+<tr><td>C</td><td>R</td><td>E</td><td>P</td><td>E</td></tr>
+<tr><td>B</td><td>I</td><td>N</td><td>G</td><td>O</td></tr>
 </table>
 
-<table id="body_table">
-</table>
+<table id="body_table" />
 
 <table id="button_table">
 <tr>
     <td id="share_button" class="button" onclick="clicked_share_button()">
         <div />
     </td>
-    <td class="hidden"> </td>
+    <td class="hidden" />
     <td id="blur_button" class="button" onclick="clicked_blur_button()">
         <div />
     </td>
@@ -170,7 +178,7 @@
 <table>
 <tr>
     <td id="url_box">
-        <a href=""></a>
+        <a href="" />
     </td>
 </tr>
 </table>
@@ -179,11 +187,6 @@
 </div>
 
 <script>
-// state:
-//  state_bingo
-//  state_blur
-//  state_show_url
-
 const bingo_size = 5;
 const bingo_num_cells = bingo_size * bingo_size;
 const free_square_idx = (bingo_num_cells - 1) / 2;
@@ -338,7 +341,6 @@ function get_cookies() {
 function shuffle(array) {
     let currentIndex = array.length;
     while (0 !== currentIndex) {
-
         // Pick a remaining element...
         let randomIndex = Math.floor(rand() * currentIndex);
         currentIndex -= 1;
