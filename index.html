@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>B E R R Y C R E P E B I N G O</title>
+    <meta name="description" content="Bingo card for twitch.tv/berrycrepe">
+    <meta name="keywords" content="BerryCrepe, bingo, twitch, twitch.tv">
+    <meta name="author" content="nativefig">
+    <title>BERRYCREPE BINGO</title>
 </head>
 
 <body>
@@ -12,7 +15,7 @@
 <table class="head_table">
 <tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
 <tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
-<tr><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
+<tr id="bingo"><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
 </table>
 
 <table class="body_table">
@@ -21,7 +24,7 @@
 <table class="button_table">
 <tr>
     <td id="url_button" class="button" onclick="clicked_url_button()">
-        Share this card
+        Share card
     </td>
     <td class="hidden"> </td>
     <td id="hide_button" class="button" onclick="clicked_hide_button()">
@@ -83,8 +86,8 @@
         width: 100%;
     }
     td {
-        padding-left: 1.4%;
-        padding-right: 1.4%;
+        padding-left: 1.5%;
+        padding-right: 1.5%;
         background-color: seashell;
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
         border-radius: 0.5vmin;
@@ -100,7 +103,6 @@
         background-color: inherit;
         font-weight: bold;
         text-align: center;
-        font-family: Arial, Helvetica, sans-serif;
         font-size: 3.0vmin;
     }
     .body_table td {
@@ -115,7 +117,7 @@
     }
     body {
         color: #202020;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Arial, sans-serif;
         font-size: 1.8vmin;
     }
     a {
@@ -131,8 +133,6 @@
 
     .button {
         height: 3.2vmin;
-        padding-left: 1.0%;
-        padding-right: 1.0%;
         cursor: pointer;
     }
     #url_box {
@@ -143,11 +143,9 @@
         visibility: hidden;
     }
     .checked {
-        //border: 2px solid #202020;
         background-color: #ffb347 !important;
     }
     .checked_blue {
-        //border: 2px solid #202020;
         background-color: #108dc7 !important;
     }
     .blur_text {
@@ -157,6 +155,9 @@
     .small_text {
         font-size: 1.7vmin;
     }
+    .bingo_state td {
+        color: #ffb347 !important;
+    }
 </style>
 
 <script>
@@ -165,6 +166,7 @@
 
 const bingo_size = 5;
 const bingo_num_cells = bingo_size * bingo_size;
+const free_square_idx = (bingo_num_cells - 1) / 2;
 
 const param_str_base = 32;
 
@@ -272,7 +274,8 @@ function assert(cond, msg) {
 }
 
 function spam(text) {
-    spam_box.innerText += text;
+    //spam_box.innerHTML = "";
+    spam_box.innerText = text;
     spam_box.innerHTML += "<br>";
 }
 
@@ -341,15 +344,40 @@ function get_page_url_no_params() {
     return window.location.href.split("?")[0];
 }
 
+function is_bingo() {
+    const bits = get_card_state() | (1 << free_square_idx);
+    let hmask = 0x1f;
+    let vmask = 0x108421;
+    for (let i = 0; i < bingo_size; ++i) {
+        if ((bits & hmask) === hmask || (bits & vmask) === vmask)
+            return true;
+        vmask <<= 1;
+        hmask <<= bingo_size;
+    }
+    const dmask1 = 0x1041041;
+    const dmask2 = 0x111110;
+    return ((bits & dmask1) === dmask1 || (bits & dmask2) === dmask2)
+}
+function detect_bingo() {
+    const bingo_text = document.getElementById("bingo");
+    bingo_text.classList.toggle("bingo_state", is_bingo());
+}
+
 function update_url_box() {
     let page = get_page_url_no_params();
-    let state = get_card_state();
+    let state = get_card_state().toString(param_str_base);
     let url = `${page}?seed=${seed}&state=${state}`;
     if (blur) {
         url += "&blur";
     }
     url_link.innerText = url;
     url_link.setAttribute("href", url);
+}
+
+function refresh_state() {
+    update_url_box();
+    update_blur();
+    detect_bingo();
 }
 
 function get_checked_class(cell) {
@@ -365,11 +393,12 @@ function toggle_cell(cell) {
 function clicked_cell(cell_id) {
     toggle_cell(cells[cell_id]);
     update_url_box();
+    detect_bingo();
 }
 
 function clicked_url_button() {
     if (url_box.classList.toggle("hidden")) {
-        url_button.innerText = "Share this card";
+        url_button.innerText = "Share card";
     } else {
         url_button.innerText = "Hide link";
     }
@@ -379,8 +408,7 @@ function clicked_reset_button() {
         cell.classList.remove(get_checked_class(cell));
     }
     blur = false;
-    update_url_box();
-    update_blur();
+    refresh_state();
 }
 function clicked_new_button() {
     set_cookie("id", "", 0);
@@ -419,7 +447,6 @@ function gen_table(table, strings) {
         for (let j = 0; j < bingo_size; ++j) {
             let cell = document.createElement("td");
             let text;
-            const free_square_idx = (bingo_num_cells - 1) / 2;
             if (cells.length === free_square_idx) {
                 text = "Free space!";
                 cell.classList.add(get_checked_class(cell));
@@ -452,7 +479,7 @@ function get_card_state() {
         }
         ++bit_count;
     }
-    return bits.toString(param_str_base);
+    return bits;
 }
 
 // Execution starts here
@@ -515,17 +542,13 @@ function main() {
     let state_str = search_params.get("state");
     if (state_str !== null) {
         let state_num = parseInt(state_str, param_str_base);
-        for (let i = 0; i < cells.length; ++i, state_num >>= 1) {
+        for (let i = 0; i < cells.length; ++i, state_num >>>= 1) {
             if (state_num & 1) {
                 toggle_cell(cells[i]);
             }
         }
     }
-    update_url_box();
-    update_blur();
-
-    // TODO:
-    // Detect bingo state
+    refresh_state();
 }
 
 main();
