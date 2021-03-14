@@ -105,10 +105,10 @@
         text-shadow: 0 0 1vmin rgba(0,0,0,0.8);
     }
 
-    #hide_button:after {
+    #blur_button:after {
         content: "Hide";
     }
-    .state_blur #hide_button:after {
+    .state_blur #blur_button:after {
         content: "Show";
     }
 
@@ -155,7 +155,7 @@
         <div />
     </td>
     <td class="hidden"> </td>
-    <td id="hide_button" class="button" onclick="clicked_hide_button()">
+    <td id="blur_button" class="button" onclick="clicked_blur_button()">
         <div />
     </td>
     <td class="button" onclick="clicked_reset_button()">
@@ -410,7 +410,7 @@ function clicked_new_button() {
     set_cookie("id", "", 0);
     window.location = get_page_url_no_params();
 }
-function clicked_hide_button() {
+function clicked_blur_button() {
     body.classList.toggle("state_blur");
     refresh_state();
 }
