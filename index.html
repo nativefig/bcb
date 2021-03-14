@@ -15,19 +15,19 @@
         justify-content: center;
     }
     @media screen and (orientation:landscape) {
-        .body_table {
+        #body_table {
             height: 75vmin;
         }
         .centered {
-                width: 75vmin;
+            width: 75vmin;
         }
     }
     @media screen and (orientation:portrait) {
-        .body_table {
+        #body_table {
             height: 95vmin;
         }
         .centered {
-                width: 95vmin;
+            width: 95vmin;
         }
     }
 
@@ -44,11 +44,11 @@
         border-radius: 0.5vmin;
     }
 
-    .head_table {
+    #head_table {
         border-spacing: 1vmin 0;
         color: seashell;
     }
-    .head_table td {
+    #head_table td {
         box-shadow: none;
         width: 20%;
         background-color: inherit;
@@ -56,13 +56,13 @@
         text-align: center;
         font-size: 3.0vmin;
     }
-    .body_table td {
+    #body_table td {
         width: 20%;
         height: 20%;
         text-align: center;
         cursor: pointer;
     }
-    .button_table td {
+    #button_table td {
         text-align: center;
         width: 20%;
     }
@@ -84,32 +84,54 @@
         height: 3.2vmin;
         cursor: pointer;
     }
-    #url_box {
-        height: 3vmin;
-    }
 
     .hidden {
         visibility: hidden;
     }
+
     .checked {
         background-color: #ffb347 !important;
     }
     .checked.blueguy {
         background-color: #108dc7 !important;
     }
-    .blur_unchecked td:not(.checked) {
-        color: transparent;
-        text-shadow: 0 0 1vmin rgba(0,0,0,0.8);
-    }
+
     .small_text {
         font-size: 1.7vmin;
     }
-    .bingo_state #bingo_word {
-        color: #ffb347 !important;
-        text-shadow: 0 0 1vmin #ffb347;
+
+    .state_blur #body_table td:not(.checked) {
+        color: transparent;
+        text-shadow: 0 0 1vmin rgba(0,0,0,0.8);
     }
-    .glow {
+
+    #hide_button:after {
+        content: "Hide";
+    }
+    .state_blur #hide_button:after {
+        content: "Show";
+    }
+
+    #share_button div:after {
+        content: "Share card";
+    }
+    .state_bingo #share_button div:after {
+        content: "Share bingo!";
+    }
+    .state_show_url #share_button div:after {
+        content: "Hide link";
+    }
+
+    .state_bingo:not(.state_show_url) #share_button {
         box-shadow: 0 0 2vmin #ffb347;
+    }
+
+    #url_box {
+        height: 3vmin;
+        visibility: hidden;
+    }
+    .state_show_url #url_box {
+        visibility: visible;
     }
 </style>
 </head>
@@ -118,22 +140,23 @@
 <div class="center">
 <div class="centered">
 
-<table class="head_table">
+<table id="head_table">
 <tr><td><div>B</div></td><td><div>E</div></td><td><div>R</div></td><td><div>R</div></td><td><div>Y</div></td></tr>
 <tr><td><div>C</div></td><td><div>R</div></td><td><div>E</div></td><td><div>P</div></td><td><div>E</div></td></tr>
 <tr><td><div>B</div></td><td><div>I</div></td><td><div>N</div></td><td><div>G</div></td><td><div>O</div></td></tr>
 </table>
 
-<table class="body_table">
+<table id="body_table">
 </table>
 
-<table class="button_table">
+<table id="button_table">
 <tr>
     <td id="share_button" class="button" onclick="clicked_share_button()">
+        <div />
     </td>
     <td class="hidden"> </td>
     <td id="hide_button" class="button" onclick="clicked_hide_button()">
-        Hide
+        <div />
     </td>
     <td class="button" onclick="clicked_reset_button()">
         Reset
@@ -146,7 +169,7 @@
 
 <table>
 <tr>
-    <td id="url_box" class="hidden">
+    <td id="url_box">
         <a href=""></a>
     </td>
 </tr>
@@ -156,17 +179,18 @@
 </div>
 
 <script>
+// state:
+//  state_bingo
+//  state_blur
+//  state_show_url
+
 const bingo_size = 5;
 const bingo_num_cells = bingo_size * bingo_size;
 const free_square_idx = (bingo_num_cells - 1) / 2;
 
 const param_str_base = 32;
 
-const url_box = document.getElementById("url_box");
-const share_button = document.getElementById("share_button");
 const url_link = document.querySelector("#url_box a");
-const hide_button = document.getElementById("hide_button");
-const body_table = document.querySelector(".body_table");
 const body = document.querySelector("body");
 
 const cells_text = [
@@ -257,7 +281,6 @@ const cells_text = [
 // Mutable global data
 let rand = null;
 let cells = null;
-let blur = false;
 let seed = null;
 
 function assert(cond, msg) {
@@ -347,19 +370,14 @@ function is_bingo() {
 }
 
 function refresh_state() {
-    let bingo = is_bingo();
+    body.classList.toggle("state_bingo", is_bingo());
 
-    body.classList.toggle("bingo_state", bingo);
-
-    body_table.classList.toggle("blur_unchecked", blur);
-
-    update_share_button(bingo);
-
+    // Update the share url
     {
         let page = get_page_url_no_params();
         let state = get_card_state().toString(param_str_base);
         let url = `${page}?seed=${seed}&state=${state}`;
-        if (blur) {
+        if (body.classList.contains("state_blur")) {
             url += "&blur";
         }
         url_link.innerText = url;
@@ -374,29 +392,18 @@ function toggle_cell(cell) {
     cell.classList.toggle("checked");
 }
 
-function update_share_button(bingo) {
-    let hidden = url_box.classList.contains("hidden");
-    if (hidden) {
-        share_button.innerText = bingo ? "Share bingo!" : "Share card";
-    } else {
-        share_button.innerText = "Hide link";
-    }
-    share_button.classList.toggle("glow", bingo && hidden);
-}
-
 function clicked_cell(cell_id) {
     toggle_cell(cells[cell_id]);
     refresh_state();
 }
 function clicked_share_button() {
-    url_box.classList.toggle("hidden");
-    update_share_button(is_bingo());
+    body.classList.toggle("state_show_url");
 }
 function clicked_reset_button() {
     for (let cell of cells) {
         cell.classList.remove("checked");
     }
-    blur = false;
+    body.classList.remove("state_blur");
     refresh_state();
 }
 function clicked_new_button() {
@@ -404,13 +411,7 @@ function clicked_new_button() {
     window.location = get_page_url_no_params();
 }
 function clicked_hide_button() {
-    blur = !blur;
-    if (blur) {
-        hide_button.innerText = "Show";
-    } else {
-        hide_button.innerText = "Hide";
-    }
-    refresh_state();
+    body.classList.toggle("state_blur");
 }
 
 function gen_table(table, strings) {
@@ -463,7 +464,9 @@ function get_card_state() {
 function main() {
     let search_params = new URLSearchParams(window.location.search);
 
-    blur = search_params.has("blur");
+    if (search_params.has("blur")) {
+        body.classList.add("state_blur");
+    }
 
     seed = search_params.get("seed");
     if (seed === null) {
@@ -514,6 +517,7 @@ function main() {
     }
     shuffle(strings);
 
+    const body_table = document.getElementById("body_table");
     cells = gen_table(body_table, strings);
     assert(cells.length === bingo_num_cells);
 
