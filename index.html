@@ -219,6 +219,10 @@ const cells_text = [
     ],
     '"Don\'t look at my YouTube recommended videos"',
     '"Soda is spicy"',
+    '"If you know, you know"',
+    '"It\'s not a penis"',
+    '"Don\'t look at my chair, it\'s really dirty"',
+    '"I did not say \'white people happy\'"',
     [
         1,
         '"Are you shitting my dick off"',
@@ -246,13 +250,17 @@ const cells_text = [
         'Tells the Fritos story again',
         'Refuses to tell the Fritos story again',
     ],
+    [
+        1,
+        'Surprise appearance by Ahri and/or Nala',
+        'Dog barks off-cam',
+    ],
     'Makes a JoJo reference',
     'Uses a bad MS Paint drawing to explain something',
     'Threatens chat by holding a knife to the camera',
     'Talks about people who hate her',
     'Uses the word "cooch-hole"',
     'Throws up on or off cam',
-    'BlueGuy',
     'Hides sweaty armpits by covering them with hands',
     'Threatens to fire a mod',
     'Tells a cringe inducing story from her childhood',
@@ -264,6 +272,7 @@ const cells_text = [
     'Talks about how great Buc-ee\'s is',
     'Abuses Koby',
     'Claims to be a millionaire',
+    'Calls a non-money game currency "dollars"',
     [
         'Tells chat to stop talking about cum',
         'Talks about cum',
@@ -489,6 +498,9 @@ function main() {
     rand = splitmix32(hash(seed));
 
     let strings = [];
+    if (rand() < 0.6) {
+        strings.push("BlueGuy");
+    }
     {
         let remaining = [...cells_text];
         // Minus one to account for free space
